@@ -1,0 +1,4 @@
+#!/bin/bash
+# /usr/local/emhttp/plugins/rathole/scripts/rc.rathole
+exec /etc/rc.d/rc.rathole "$@"
+

@@ -1,0 +1,37 @@
+#!/bin/bash
+# /etc/rc.d/rc.rathole - start/stop the rathole daemon
+
+start() {
+  if ! /usr/bin/pgrep --ns $$ --euid root -f "ratholeorig.*--client" 1> /dev/null 2> /dev/null ; then
+    CONFIG_FILE="/usr/local/emhttp/plugins/rathole/rathole.toml"
+    if ! cp -f /boot/config/plugins/rathole/rathole.toml "$CONFIG_FILE" 2>/dev/null ; then
+      echo "rc.rathole: config file not found at /boot/config/plugins/rathole/rathole.toml" >&2
+      return 1
+    fi
+    stdbuf -oL -eL /usr/sbin/ratholeorig --client "$CONFIG_FILE" >> /var/log/rathole.log 2>&1 &
+  fi
+}
+
+stop() {
+  killall --ns $$ --wait ratholeorig 2> /dev/null
+}
+
+restart() {
+  stop
+  sleep 1
+  start
+}
+
+case "$1" in
+'start')
+  start
+  ;;
+'stop')
+  stop
+  ;;
+'restart')
+  restart
+  ;;
+*)
+  echo "usage $0 start|stop|restart"
+esac

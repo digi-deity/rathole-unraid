@@ -1,0 +1,23 @@
+<CommunityApplications>
+  <!-- Required profile -->
+  <Profile>
+    This repository provides the **rathole** plugin for unRAID.
+
+    rathole is a lightweight, high-performance reverse proxy written in Rust. It exposes local services on a NAT network to a public server, which can be useful for remote access to home-lab services without opening ports on your router.
+
+    This plugin installs the rathole **client** on your unRAID server, adds a webGUI page to edit `rathole.toml` (server address, port, and service mappings), and provides start/stop/restart control of the daemon.
+
+    For support or questions, please open an issue on GitHub or visit the unRAID forum topic.
+  </Profile>
+
+  <!-- Repository icon (root-level icon.png) -->
+  <Icon>https://raw.githubusercontent.com/digi-deity/rathole-unraid/main/icon.png</Icon>
+
+  <!-- Optional web page -->
+  <WebPage>https://github.com/digi-deity/rathole-unraid</WebPage>
+
+  <!-- Optional support and donation links -->
+  <!-- PLACEHOLDER: replace with the real unRAID forum support topic once it exists -->
+  <Forum>https://forums.unraid.net/topic/PLACEHOLDER_RATHOLE_SUPPORT_TOPIC</Forum>
+
+</CommunityApplications>

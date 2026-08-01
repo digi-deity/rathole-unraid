@@ -1,0 +1,14 @@
+rathole for unRAID
+Copyright 2026 digi-deity
+
+This product is based on rathole, a lightweight, high-performance reverse
+proxy for NAT traversal developed by the rathole-org contributors:
+
+    https://github.com/rathole-org/rathole
+
+rathole is distributed under the Apache License, Version 2.0:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+The rathole binary is downloaded from the official rathole GitHub releases
+at install time and is not vendored in this repository.

@@ -1,0 +1,101 @@
+Menu="Utilities"
+Title="rathole"
+Icon="rathole.png"
+---
+<?PHP
+/* Copyright 2005-2016, Lime Technology
+ * Copyright 2012-2016, Bergware International.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ */
+?>
+> Use this page to edit your rathole **client** config (`rathole.toml`) and to start or stop the rathole client.
+
+<?
+$file = "/boot/config/plugins/rathole/rathole.toml";
+$text = file_exists($file) ? file_get_contents($file) : '';
+$default_text = $text;
+?>
+
+<?
+exec('ratholeorig --version 2>&1 | grep -Po "[\d]+\.[\d]+\.[\d]+"', $output);
+$currentversion = isset($output[0]) ? $output[0] : 'unknown';
+?>
+
+<?
+exec('pgrep ratholeorig 2>/dev/null', $pidout);
+$running = !empty($pidout);
+$statustext = $running ? '<span style="color:#5fba3a">&#9679; Running</span>' : '<span style="color:#e05c5c">&#9679; Stopped</span>';
+?>
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.row { display: flex; }
+.column { padding: 10px; }
+.left { flex: 1; }
+.right { flex: 3; }
+.btn { margin-right: 6px; }
+</style>
+</head>
+<body>
+
+<div class="row">
+  <div class="column left">
+    <?
+    echo "Installed version: $currentversion";
+    echo "<br><br>Status: $statustext";
+    ?>
+    <br><br>
+    <form method="POST" action="/update.php" target="progressFrame">
+      <input type="hidden" name="#include" value="/webGui/include/update.php">
+      <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/rathole/scripts/rc.rathole">
+      <input type="hidden" name="#arg[1]" value="start">
+      <input type="submit" class="btn" value="Start">
+    </form>
+    <br>
+    <form method="POST" action="/update.php" target="progressFrame">
+      <input type="hidden" name="#include" value="/webGui/include/update.php">
+      <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/rathole/scripts/rc.rathole">
+      <input type="hidden" name="#arg[1]" value="stop">
+      <input type="submit" class="btn" value="Stop">
+    </form>
+    <br>
+    <div style="margin-top: 10px;">
+      <input type="button" value="View live logs" onclick="showRatholeLogs();">
+    </div>
+  </div>
+  <div class="column right">
+    <h2>Edit client config</h2>
+    <form markdown="1" method="POST" action="/update.php" target="progressFrame">
+      <input type="hidden" name="#include" value="/webGui/include/update.file.php">
+      <input type="hidden" name="#file" value="<?=$file;?>">
+      <textarea spellcheck="false" cols="80" rows="22" name="text" style="font-family:bitstream;width:100%"><?=$text;?></textarea>
+      <br>
+      <input type="submit" value="Apply"/><input type="button" value="Original" onclick="setDefault(this.form)">
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+function setDefault(form) {
+  form.elements['text'].value = <?=json_encode($default_text);?>;
+}
+
+function showRatholeLogs() {
+  openBox('/plugins/rathole/showLogs.php', 'rathole Logs', 800, 1200);
+}
+</script>
+
+> Click the **Apply** button to save the current config to `/boot/config/plugins/rathole/rathole.toml`.
+>
+> Click the **Start** / **Stop** buttons to control the rathole client daemon.
